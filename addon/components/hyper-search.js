@@ -40,9 +40,19 @@ export default Component.extend({
     this.results = emberArray();
   },
 
+  didRender() {
+    this._super(...arguments);
+    if (this.get('clearOnOutsideClick')) {
+      Ember.$(document).on('click', this._handleOutsideClick.bind(this));
+    }
+  },
+
   willDestroyElement() {
     this._super(...arguments);
     this.removeAllFromCache();
+    if (this.get('clearOnOutsideClick')) {
+      Ember.$(document).off('click', run.cancel(this, this._handleOutsideClick.bind(this)));
+    }
   },
 
   cache(query, results) {
@@ -125,6 +135,15 @@ export default Component.extend({
       this.attrs[actionName](...args);
     } else {
       this.sendAction(actionName, ...args);
+    }
+  },
+
+  _handleOutsideClick(event) {
+    let $element = this.$();
+    let $target = $(event.target);
+
+    if (!$target.closest($element).length) {
+      this.clearResults();
     }
   },
 
