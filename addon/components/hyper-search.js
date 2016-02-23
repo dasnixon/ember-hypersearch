@@ -142,9 +142,13 @@ export default Component.extend({
     let $element = this.$();
     let $target = $(event.target);
 
-    if (!$element.children($target).length) {
-      this.clearResults();
+    if (isBlank($element.children($target)) && isBlank($target.closest($element))) {
+      this.set('showResults', false);
     }
+  },
+
+  click() {
+    this.set('showResults', true);
   },
 
   actions: {
