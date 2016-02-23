@@ -6,7 +6,7 @@ const {
   A: emberArray,
   RSVP: { Promise, resolve, reject },
   $: { ajax },
-  run: { debounce, bind },
+  run: { debounce, bind, cancel },
   get,
   set,
   isBlank,
@@ -51,7 +51,7 @@ export default Component.extend({
     this._super(...arguments);
     this.removeAllFromCache();
     if (this.get('clearOnOutsideClick')) {
-      Ember.$(document).off('click', run.cancel(this, this._handleOutsideClick.bind(this)));
+      Ember.$(document).off('click', cancel(this, this._handleOutsideClick.bind(this)));
     }
   },
 
@@ -142,7 +142,7 @@ export default Component.extend({
     let $element = this.$();
     let $target = $(event.target);
 
-    if (!$target.closest($element).length) {
+    if (!$element.children($target).length) {
       this.clearResults();
     }
   },
