@@ -142,7 +142,7 @@ export default Component.extend({
     let $element = this.$();
     let $target = $(event.target);
 
-    if (isBlank($element.children($target)) && isBlank($target.closest($element))) {
+    if (isBlank($element.children().find($target)) && isBlank($target.closest($element))) {
       this.set('showResults', false);
     }
   },
